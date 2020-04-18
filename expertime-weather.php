@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Expertime Weather
  * Plugin URI:        https://github.com/pierre-dickinson/expertime-weather
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       The plugin displays weather of the day regarding position or address sent by the user. It also displays the forecast for the next coming days.
  * Version:           1.0.0
  * Author:            Pierre Dickinson
  * Author URI:        https://github.com/pierre-dickinson

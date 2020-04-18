@@ -112,6 +112,14 @@ class Expertime_Weather {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-expertime-weather-i18n.php';
 
 		/**
+		 * The class responsible for instantiate your custom template loader class, 
+		 * and use it to call the get_template_part() method. This could be within a shortcode callback, 
+		 * or something you want theme developers to include in their files.
+		 * @link https://github.com/GaryJones/Gamajo-Template-Loader
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-expertime-weather-template-loader.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-expertime-weather-admin.php';
@@ -156,7 +164,7 @@ class Expertime_Weather {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_expertime_weather_menu_page' );
 	}
 
 	/**
