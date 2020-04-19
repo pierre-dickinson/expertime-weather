@@ -37,6 +37,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'EXPERTIME_WEATHER_VERSION', '1.0.0' );
 
+define( 'EXPERTIME_WEATHER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-expertime-weather-activator.php
@@ -76,7 +78,9 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-expertime-weather.php';
 function run_expertime_weather() {
 
 	$plugin = new Expertime_Weather();
-	$plugin->run();
 
+	//$expertime_weather_template_loader = new Expertime_Weather_Template_Loader;
+
+	$plugin->run();
 }
 run_expertime_weather();

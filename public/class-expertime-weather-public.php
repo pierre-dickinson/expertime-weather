@@ -51,8 +51,7 @@ class Expertime_Weather_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
-	}
+	}	
 
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
@@ -97,7 +96,7 @@ class Expertime_Weather_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/expertime-weather-public.js', array( 'jquery' ), $this->version, false );
-
+		
 	}
 
 }

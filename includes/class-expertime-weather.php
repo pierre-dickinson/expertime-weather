@@ -125,6 +125,16 @@ class Expertime_Weather {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-expertime-weather-admin.php';
 
 		/**
+		 * Load the required dependencies for the Admin facing functionality.
+		 *
+		 * Include the following files that make up the plugin:
+		 *
+		 * - Expertime_weather_Admin_Settings. Registers the admin settings and page.
+		 *
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) .  'admin/class-expertime-weather-admin-settings.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
@@ -161,10 +171,15 @@ class Expertime_Weather {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Expertime_Weather_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_settings = new Expertime_Weather_Admin_Settings( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_expertime_weather_menu_page' );
+		
+		//$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_expertime_weather_menu_page' );
+		$this->loader->add_action( 'admin_menu', $plugin_settings, 'setup_plugin_options_menu' );
+		$this->loader->add_action( 'admin_init', $plugin_settings, 'initialize_display_options' );
+		$this->loader->add_action( 'admin_init', $plugin_settings, 'initialize_input_api_configuration_options' );
 	}
 
 	/**

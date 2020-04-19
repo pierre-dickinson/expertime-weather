@@ -13,7 +13,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
   }
   
   /**
-   * Template loader for Meal Planner.
+   * Template loader for Expertime Weather.
    *
    * Only need to specify class properties here.
    *
