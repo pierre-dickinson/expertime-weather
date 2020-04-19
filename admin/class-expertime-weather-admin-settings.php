@@ -77,7 +77,7 @@ class Expertime_Weather_Admin_Settings {
         );
         
         // plugin must display a "Weather" menu in the WordPress back office. 
-        // It must also have a submenu item/page named "Configuration" pointing to the same view
+        // It must also have a submenu item/page named "Configuration" pointing to the same
         remove_submenu_page( 'expertime-weather-settings', 'expertime-weather-settings' );
         
 	}
@@ -122,12 +122,8 @@ class Expertime_Weather_Admin_Settings {
 		<!-- Create a header in the default WordPress 'wrap' container -->
 		<div class="wrap">
 
-			<h2><?php _e( 'Weather', 'expertime-weather' ); ?></h2>
+			<h2><?php _e( 'Configuration de l\'api', 'expertime-weather' ); ?></h2>
 			<?php settings_errors(); ?>
-
-			<h2>
-			<?php _e( 'Configuration', 'expertime-weather' ); ?>
-			</h2>
 
 			<form method="post" action="options.php">
 				<?php
@@ -147,7 +143,7 @@ class Expertime_Weather_Admin_Settings {
 	/**
 	 * This function provides a simple description for the General Configuration page.
 	 *
-	 * It's called from the 'wppb-demo_initialize_theme_options' function by being passed as a parameter
+	 * It's called from the 'expertime_weather_initialize_theme_options' function by being passed as a parameter
 	 * in the add_settings_section function.
 	 */
 	public function general_options_callback() {
@@ -164,7 +160,8 @@ class Expertime_Weather_Admin_Settings {
 	 * in the add_settings_section function.
 	 */
 	public function input_configuration_api_callback() {
-		$options = get_option('expertime_weather_options');
+        
+        $options = get_option('expertime_weather_options');
         
         // display options values recorded in db
         //var_dump($options);
@@ -201,7 +198,7 @@ class Expertime_Weather_Admin_Settings {
 			'expertime_weather_configuration_options'
 		);
 
-	} // end wppb-demo_initialize_theme_options
+	} // end expertime_weather_initialize_theme_options
 
 
 	/**
@@ -233,16 +230,6 @@ class Expertime_Weather_Admin_Settings {
 			'input_api_configuration_section'
 		);
 
-        /*
-		add_settings_field(
-			'Textarea Element',
-			__( 'Textarea Element', 'expertime-weather' ),
-			array( $this, 'textarea_element_callback'),
-			'expertime_weather_options',
-			'input_api_configuration_section'
-        );
-        */
-
 		register_setting(
 			'expertime_weather_options',
 			'expertime_weather_options',
@@ -251,49 +238,6 @@ class Expertime_Weather_Admin_Settings {
 
 	}
 
-	/**
-	 * This function renders the interface elements for toggling the visibility of the header element.
-	 *
-	 * It accepts an array or arguments and expects the first element in the array to be the description
-	 * to be displayed next to the checkbox.
-	 */
-	public function toggle_header_callback($args) {
-
-		// First, we read the options collection
-		$options = get_option('expertime_weather_configuration_options');
-
-		// Next, we update the name attribute to access this element's ID in the context of the display options array
-		// We also access the show_header element of the options collection in the call to the checked() helper function
-		$html = '<input type="checkbox" id="show_header" name="expertime_weather_configuration_options[show_header]" value="1" ' . checked( 1, isset( $options['show_header'] ) ? $options['show_header'] : 0, false ) . '/>';
-
-		// Here, we'll take the first argument of the array and add it to a label next to the checkbox
-		$html .= '<label for="show_header">&nbsp;'  . $args[0] . '</label>';
-
-		echo $html;
-
-	} // end toggle_header_callback
-
-	public function toggle_content_callback($args) {
-
-		$options = get_option('expertime_weather_configuration_options');
-
-		$html = '<input type="checkbox" id="show_content" name="expertime_weather_configuration_options[show_content]" value="1" ' . checked( 1, isset( $options['show_content'] ) ? $options['show_content'] : 0, false ) . '/>';
-		$html .= '<label for="show_content">&nbsp;'  . $args[0] . '</label>';
-
-		echo $html;
-
-	} // end toggle_content_callback
-
-	public function toggle_footer_callback($args) {
-
-		$options = get_option('expertime_weather_configuration_options');
-
-		$html = '<input type="checkbox" id="show_footer" name="expertime_weather_configuration_options[show_footer]" value="1" ' . checked( 1, isset( $options['show_footer'] ) ? $options['show_footer'] : 0, false ) . '/>';
-		$html .= '<label for="show_footer">&nbsp;'  . $args[0] . '</label>';
-
-		echo $html;
-
-	} // end toggle_footer_callback
 
 	public function twitter_callback() {
 
@@ -311,46 +255,25 @@ class Expertime_Weather_Admin_Settings {
 
 	} // end twitter_callback
 
-	public function facebook_callback() {
-
-		$options = get_option( 'expertime_weather_social_options' );
-
-		$url = '';
-		if( isset( $options['facebook'] ) ) {
-			$url = esc_url( $options['facebook'] );
-		} // end if
-
-		// Render the output
-		echo '<input type="text" id="facebook" name="expertime_weather_social_options[facebook]" value="' . $url . '" />';
-
-	} // end facebook_callback
-
-	public function googleplus_callback() {
-
-		$options = get_option( 'expertime_weather_social_options' );
-
-		$url = '';
-		if( isset( $options['googleplus'] ) ) {
-			$url = esc_url( $options['googleplus'] );
-		} // end if
-
-		// Render the output
-		echo '<input type="text" id="googleplus" name="expertime_weather_social_options[googleplus]" value="' . $url . '" />';
-
-	} // end googleplus_callback
-
+	
 	public function input_element_callback() {
+
+        $api_url = '';
 
 		$options = get_option( 'expertime_weather_options' );
 
+        if( isset( $options['input_api_endpoint'] ) ) {
+			$api_url = esc_url( $options['input_api_endpoint'] );
+		} // end if
+
 		// Render the output
-		echo '<input type="text" id="input_api_endpoint" name="expertime_weather_options[input_api_endpoint]" value="' . $options['input_api_endpoint'] . '" />';
+		echo '<input type="text" id="input_api_endpoint" name="expertime_weather_options[input_api_endpoint]" size="70" value="' . $api_url . '" />';
 
 	} // end input_element_callback
 
 
 	/**
-	 * Sanitization callback for the social options. Since each of the social options are text inputs,
+	 * Sanitization callback for the options. Since each of the options are text inputs,
 	 * this function loops through the incoming option and strips all tags and slashes from the value
 	 * before serializing it.
 	 *
@@ -358,7 +281,7 @@ class Expertime_Weather_Admin_Settings {
 	 *
 	 * @returns			The collection of sanitized values.
 	 */
-	public function sanitize_social_options( $input ) {
+	public function sanitize_input_api_endpoint( $input ) {
 
 		// Define the array for the updated options
 		$output = array();
@@ -373,9 +296,9 @@ class Expertime_Weather_Admin_Settings {
 		} // end foreach
 
 		// Return the new collection
-		return apply_filters( 'sanitize_social_options', $output, $input );
+		return apply_filters( 'sanitize_input_api_endpoint', $output, $input );
 
-	} // end sanitize_social_options
+	} // end sanitize_input_api_endpoint
 
 	public function validate_input_api_configuration_options( $input ) {
 
