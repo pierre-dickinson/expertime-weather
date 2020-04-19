@@ -200,12 +200,11 @@ class Expertime_Weather {
 		$this->loader->add_action( 'init', $plugin_public, 'create_expertime_weather_page' );
 		
 		// Template loader instantiate here
-		$this->loader->add_filter( 'page_template', $plugin_public, 'get_expertime_weather_template');
-		
+		$this->loader->add_filter( 'the_content', $plugin_public, 'get_expertime_weather_template');
 	}
 
 	/**
-	 * Run the loader to execute all of the hooks with WordPress.
+	 * Run the loader to execute all osf the hooks with WordPress.
 	 *
 	 * @since    1.0.0
 	 */

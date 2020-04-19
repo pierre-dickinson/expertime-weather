@@ -139,7 +139,7 @@ class Expertime_Weather_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function get_expertime_weather_template($template) {
+	public function get_expertime_weather_template($content) {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -155,9 +155,9 @@ class Expertime_Weather_Public {
 		$plugin_template_loader = new Expertime_Weather_Template_Loader;
 
 		if ( is_page( 'my-weather' ) ) {
-			$page_template = $plugin_template_loader->get_template_part( 'my-weather' );
+        	$content .= $plugin_template_loader->get_template_part( 'my-weather' );
 		}
-		return $page_template;
+		return $content;
 		
 	}
 	
