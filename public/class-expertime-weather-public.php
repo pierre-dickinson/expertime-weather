@@ -99,4 +99,67 @@ class Expertime_Weather_Public {
 		
 	}
 
+
+	/**
+	 * Create the rendering page for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
+	public function create_expertime_weather_page() {
+
+		$page_slug = 'my-weather';
+
+		$page = get_page_by_path( $page_slug , OBJECT );
+
+		if ( isset($page) ) {
+			return;
+		}
+
+		// Gather post data.
+		$new_page = array(
+			'post_title'    => 'My Weather',
+			'post_name'    => $page_slug,
+			'post_content'  => '',
+			'post_status'   => 'publish',
+			'post_type'    => 'page',
+			'post_author'   => get_current_user_id()
+		);
+ 
+		// Insert the post into the database.
+		$page_id = wp_insert_post( $new_page, $wp_error );
+
+		if(empty($page_id)) {
+			error_log("Expertime Weather plugin -> error during 'my-weather' page creation.");
+		}
+		
+	}
+
+	/**
+	 * Render the right template for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
+	public function get_expertime_weather_template($template) {
+
+		/**
+		 * This function is provided for demonstration purposes only.
+		 *
+		 * An instance of this class should be passed to the run() function
+		 * defined in Expertime_Weather_Loader as all of the hooks are defined
+		 * in that particular class.
+		 *
+		 * The Expertime_Weather_Loader will then create the relationship
+		 * between the defined hooks and the functions defined in this
+		 * class.
+		 */
+		$plugin_template_loader = new Expertime_Weather_Template_Loader;
+
+		if ( is_page( 'my-weather' ) ) {
+			$page_template = $plugin_template_loader->get_template_part( 'my-weather' );
+		}
+		return $page_template;
+		
+	}
+	
+
 }
