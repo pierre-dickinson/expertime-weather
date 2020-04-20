@@ -40,7 +40,9 @@ class Expertime_Weather_Public {
 	 */
 	private $version;
 
-	private $google_api_key = 'AIzaSyA_rE4ZgX194X5WSocW1aFgMFwgkhvAwvE';
+
+	// following string can be removed in production
+	private $google_api_key = 'AIzaSyA_rE4ZgX194X5WSocW1aFgMFwgkhvAwvE'; // during tests
 
 
 	/**
@@ -105,8 +107,18 @@ class Expertime_Weather_Public {
 		 * class.
 		 */
 
+
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/expertime-weather-public.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script('googlemaps', 'https://maps.googleapis.com/maps/api/js?libraries=places&key='.$this->google_api_key, array(), '', false);
+
+		$options = get_option( 'expertime_weather_options' );
+
+		// Next, we need to make sure the element is defined in the options. If not, we'll set an empty string.
+		$google_api_key = $this->google_api_key; // default one
+		if( isset( $options['google_api_key'] ) ) {
+			$google_api_key = $options['google_api_key'];
+		} // end if
+
+		wp_enqueue_script('googlemaps', 'https://maps.googleapis.com/maps/api/js?libraries=places&key='.$google_api_key, array(), '', false);
 	}
 
 

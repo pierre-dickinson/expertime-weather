@@ -169,6 +169,23 @@ class Expertime_Weather_Admin_Settings {
 		echo '<p>' . __( 'For instance: https://www.prevision-meteo.ch/services/json/lat=47.2173lng=-1.5534', 'expertime-weather' ) . '</p>';
 	} // end general_options_callback
 
+	/**
+	 * This function provides a simple description for the Input Google API Key section.
+	 *
+	 * It's called from the 'expertime_weather_theme_initialize_input_api_configuration_options' function by being passed as a parameter
+	 * in the add_settings_section function.
+	 */
+	public function input_configuration_google_api_callback() {
+        
+        $options = get_option('expertime_weather_options');
+        
+        // display options values recorded in db
+        //var_dump($options);
+        
+		echo '<p>' . __( 'In order to get requests to the Google Maps API, you need to create a new project under the Google API Console.', 'expertime-weather' ) . '</p>';
+		echo '<p>' . __( 'For this project, enable the Google Maps Javascript API v3 here : <a target="_blank" href="https://console.cloud.google.com/google/maps-apis/overview">get your Google API key for free here</a>', 'expertime-weather' ) . '</p>';
+	} // end general_options_callback
+
 
 	/**
 	 * Initializes the theme's display options page by registering the Sections,
@@ -183,7 +200,6 @@ class Expertime_Weather_Admin_Settings {
 			$default_array = $this->default_display_options();
 			add_option( 'expertime_weather_configuration_options', $default_array );
 		}
-
 
 		add_settings_section(
 			'general_settings_section',			            // ID used to identify this section and with which to register options
@@ -217,7 +233,7 @@ class Expertime_Weather_Admin_Settings {
 
 		add_settings_section(
 			'input_api_configuration_section',
-			 __( 'Configurez ici votre accès à l\'api', 'expertime-weather' ),
+			 __( 'Configurez ici votre accès à l\'api météo', 'expertime-weather' ),
 			array( $this, 'input_configuration_api_callback'),
 			'expertime_weather_options'
 		);
@@ -230,6 +246,21 @@ class Expertime_Weather_Admin_Settings {
 			'input_api_configuration_section'
 		);
 
+		add_settings_section(
+			'input_google_api_configuration_section',
+			 __( 'Configurez ici votre accès à l\'api Google Maps', 'expertime-weather' ),
+			array( $this, 'input_configuration_google_api_callback'),
+			'expertime_weather_options'
+		);
+
+		add_settings_field(
+			'Input Element',
+			__( 'Google API key', 'expertime-weather' ),
+			array( $this, 'google_api_key_callback'),
+			'expertime_weather_options',
+			'input_google_api_configuration_section'
+		);
+
 		register_setting(
 			'expertime_weather_options',
 			'expertime_weather_options',
@@ -237,23 +268,6 @@ class Expertime_Weather_Admin_Settings {
 		);
 
 	}
-
-
-	public function twitter_callback() {
-
-		// First, we read the social options collection
-		$options = get_option( 'expertime_weather_social_options' );
-
-		// Next, we need to make sure the element is defined in the options. If not, we'll set an empty string.
-		$url = '';
-		if( isset( $options['twitter'] ) ) {
-			$url = esc_url( $options['twitter'] );
-		} // end if
-
-		// Render the output
-		echo '<input type="text" id="twitter" name="expertime_weather_social_options[twitter]" value="' . $url . '" />';
-
-	} // end twitter_callback
 
 	
 	public function input_element_callback() {
@@ -267,10 +281,27 @@ class Expertime_Weather_Admin_Settings {
 		} // end if
 
 		// Render the output
-		echo '<input type="text" id="input_api_endpoint" name="expertime_weather_options[input_api_endpoint]" size="70" value="' . $api_url . '" />';
+		echo '<input type="text" id="input_api_endpoint" size="70" name="expertime_weather_options[input_api_endpoint]" value="' . $api_url . '" />';
 
 	} // end input_element_callback
 
+
+	public function google_api_key_callback() {
+
+		// First, we read the social options collection
+		$options = get_option( 'expertime_weather_options' );
+
+		// Next, we need to make sure the element is defined in the options. If not, we'll set an empty string.
+		$google_api_key = '';
+		if( isset( $options['google_api_key'] ) ) {
+			$google_api_key = $options['google_api_key'];
+		} // end if
+
+		// Render the output
+		echo '<input type="text" id="google_api_key" size="70" name="expertime_weather_options[google_api_key]" value="' . $google_api_key . '" />';
+
+	} // end google_callback
+	
 
 	/**
 	 * Sanitization callback for the options. Since each of the options are text inputs,

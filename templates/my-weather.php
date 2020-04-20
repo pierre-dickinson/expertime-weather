@@ -44,25 +44,25 @@
 
         <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'expertime-weather' ); ?>">
 
-        <div style="visibility:hidden;opacity:0;">
+        <div>
             <label>
             <span class="screen-reader-text">street_number&nbsp;:</span>
-            <input id="street_number" name="street_number" class="search-field" disabled>
+            <input type="hidden" id="street_number" name="street_number" class="search-field">
             </label>
         
             <label>
             <span class="screen-reader-text">route&nbsp;:</span>
-            <input id="route" name="route" disabled>
+            <input type="hidden" id="route" name="route">
             </label>
             
             <label>
             <span class="screen-reader-text">locality&nbsp;:</span>
-            <input id="locality" name="locality" disabled>
+            <input type="hidden" id="locality" name="locality">
             </label>
             
             <label>
             <span class="screen-reader-text">country&nbsp;:</span>
-            <input id="country" name="country" disabled>
+            <input type="hidden" id="country" name="country">
             </label>
         </div>
     </form>
