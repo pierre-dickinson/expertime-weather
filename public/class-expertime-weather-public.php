@@ -221,6 +221,55 @@ class Expertime_Weather_Public {
 		//return self::$search;
 		return $search;
 	}
+
+
+	/**
+	 * Render the search results for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
+
+	
+	static $result = '';
+	
+	public static function etw_search_results($result) {
+
+		/**
+		 * This function returns the search adress query value in template
+		 * tpl: myweather.php
+		 */
+
+		if ( is_page( 'my-weather' ) ) {
+			
+			$options = get_option( 'expertime_weather_options' );
+
+			// Next, we need to make sure the element is defined in the options. If not, we'll set an empty string.
+			$end_point_url = ''; 
+			if( isset( $options['input_api_endpoint'] ) ) {
+				$end_point_url = $options['input_api_endpoint'];
+				// remove the slash if available at the end of url and add it again to avoid issue
+				$end_point_url = rtrim($end_point_url,"/").'/';
+			}
+			else {
+				error_log('error: no end point url set in plugin settings.');
+				return;
+			}
+			
+			if ( isset($_GET['lat']) && isset($_GET['lng']) ) {
+				if ( empty($_GET['lat']) OR empty($_GET['lng']) ) {
+					error_log('error: lat or long values are empty in url GET parameters.');
+					return;
+				}
+
+				// eg. https://www.prevision-meteo.ch/services/json/lat=48.7405305lng=7.3648099
+				$result = $end_point_url . 'lat=' . $_GET["lat"] . 'lng=' . $_GET["lng"];
+			}
+			
+		}
+
+		//return self::$result;
+		return $result;
+	}
 	
 }
 
@@ -234,6 +283,14 @@ if ( ! function_exists( 'get_expertime_weather_search_query' ) ) {
 
     function get_expertime_weather_search_query($search = '') {
        echo Expertime_Weather_Public::etw_search_query($search);
+	}
+	
+}
+
+if ( ! function_exists( 'get_expertime_weather_search_results' ) ) {
+
+    function get_expertime_weather_search_results($result = '') {
+       echo Expertime_Weather_Public::etw_search_results($result);
 	}
 	
 }

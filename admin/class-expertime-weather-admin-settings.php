@@ -166,7 +166,7 @@ class Expertime_Weather_Admin_Settings {
         // display options values recorded in db
         //var_dump($options);
         
-		echo '<p>' . __( 'For instance: https://www.prevision-meteo.ch/services/json/lat=47.2173lng=-1.5534', 'expertime-weather' ) . '</p>';
+		echo '<p>' . __( 'For instance: https://www.prevision-meteo.ch/services/json/', 'expertime-weather' ) . '</p>';
 	} // end general_options_callback
 
 	/**
@@ -281,7 +281,7 @@ class Expertime_Weather_Admin_Settings {
 		} // end if
 
 		// Render the output
-		echo '<input type="text" id="input_api_endpoint" size="70" name="expertime_weather_options[input_api_endpoint]" value="' . $api_url . '" />';
+		echo '<input type="text" id="input_api_endpoint" size="60" name="expertime_weather_options[input_api_endpoint]" value="' . $api_url . '" />';
 
 	} // end input_element_callback
 
@@ -298,7 +298,7 @@ class Expertime_Weather_Admin_Settings {
 		} // end if
 
 		// Render the output
-		echo '<input type="text" id="google_api_key" size="70" name="expertime_weather_options[google_api_key]" value="' . $google_api_key . '" />';
+		echo '<input type="text" id="google_api_key" size="60" name="expertime_weather_options[google_api_key]" value="' . $google_api_key . '" />';
 
 	} // end google_callback
 	

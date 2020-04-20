@@ -19,10 +19,13 @@
 	 *
 	 */
 	
-	 // actual google api key : AIzaSyCBwn0wn6xypgYc5oCGdpq6tSCRToRdIRY
+	 // actual google api key is set in admin setting panel
 
 	$(function() {
 
+		/**
+		 Input text adress with autocomplete
+		*/
 		function initializeAutocomplete(id) {
 			var element = document.getElementById(id);
 			if (element) {
@@ -45,11 +48,43 @@
 				}
 			  }
 			}
+
+			var latitude = place.geometry.location.lat();
+			var longitude = place.geometry.location.lng();
+
+			var type_element_latitude  = document.getElementById('latitude');
+			var type_element_longitude = document.getElementById('longitude');
+			
+			type_element_latitude.value  = latitude;
+			type_element_longitude.value = longitude;
+
+			//console.log(latitude);
+			//console.log(longitude);
+
+			// refresh results section
+			$( "#expertime-weather-results" ).empty();
+			// remove get parameters from url
+			var uri = window.location.toString();
+			if (uri.indexOf("?") > 0) {
+				var clean_uri = uri.substring(0, uri.indexOf("?"));
+				window.history.replaceState({}, document.title, clean_uri);
+			}
+
+			var url = document.location.href+"?lat="+latitude+"&lng="+longitude;
+			// update the url with the new get parameters
+			document.location = url;
+
 		  }
 		  
 		  google.maps.event.addDomListener(window, 'load', function() {
 			initializeAutocomplete('expertime-weather-search-adress');
 		  });
+		  
+		  /**
+		  *  Geolocation button
+		  */
+		  var btn_geolocate = document.getElementById('expertime-weather-geolocation-btn');
+
 
 	});
 
