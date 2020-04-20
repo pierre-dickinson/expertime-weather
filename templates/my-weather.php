@@ -84,8 +84,11 @@
     
         <div class="wp-block-column">
             <div id="expertime-weather-results" style="padding:30px 0;">
-            <h4>Results here</h4>
-            <?php echo get_expertime_weather_search_results(); ?>
+            
+            <?php 
+            echo get_expertime_weather_search_results();
+            ?>
+            
             </div>
         </div>
 

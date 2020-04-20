@@ -23,6 +23,7 @@
 
 	$(function() {
 
+		
 		/**
 		 Input text adress with autocomplete
 		*/
@@ -83,8 +84,50 @@
 		  /**
 		  *  Geolocation button
 		  */
-		  var btn_geolocate = document.getElementById('expertime-weather-geolocation-btn');
 
+		  	var btn_geolocate = document.getElementById('expertime-weather-geolocation-btn');
+		  	// user geolocation
+		  	btn_geolocate.onclick = function() {
+
+				// first check for Geolocation support
+				if (!navigator.geolocation) {
+					console.log('Geolocation is not supported for this Browser/OS.');
+				}
+				else {
+					var startPos;
+					var latitude;
+					var longitude;
+
+					var geoSuccess = function(position) {
+						
+						startPos = position;
+
+						latitude = startPos.coords.latitude;
+						longitude = startPos.coords.longitude;
+
+						console.log('Geolocation startLat is: ' + latitude );
+						console.log('Geolocation startLng is: ' + longitude );
+
+						// refresh results section
+						$( "#expertime-weather-results" ).empty();
+						// remove get parameters from url
+						var uri = window.location.toString();
+						if (uri.indexOf("?") > 0) {
+							var clean_uri = uri.substring(0, uri.indexOf("?"));
+							window.history.replaceState({}, document.title, clean_uri);
+						}
+
+						var url = document.location.href+"?lat="+latitude+"&lng="+longitude;
+						// update the url with the new get parameters
+						document.location = url;
+						
+					};
+
+					navigator.geolocation.getCurrentPosition(geoSuccess);
+					
+				}
+				
+			};
 
 	});
 

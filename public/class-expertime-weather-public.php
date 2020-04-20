@@ -260,9 +260,43 @@ class Expertime_Weather_Public {
 					error_log('error: lat or long values are empty in url GET parameters.');
 					return;
 				}
+			
 
 				// eg. https://www.prevision-meteo.ch/services/json/lat=48.7405305lng=7.3648099
-				$result = $end_point_url . 'lat=' . $_GET["lat"] . 'lng=' . $_GET["lng"];
+	
+				$json_url = $end_point_url . 'lat=' . $_GET["lat"] . 'lng=' . $_GET["lng"]; 
+
+
+				// first let's check if the json file is not allready in the cache
+
+				// create the unique filename based on coordinates 
+				$json_filename = $_GET["lat"] . $_GET["lng"];
+				$json_filename = str_replace(".", "", $json_filename);
+				$json_filename = str_replace("-", "", $json_filename);
+
+				$json_cache_dir = plugin_dir_path( dirname( __FILE__ ) ) . 'public/cache/';
+				$json_cache_file = $json_cache_dir . "/" . $json_filename . ".json";
+				if (file_exists($json_cache_file)) {
+					$file_content = file_get_contents($json_cache_file);
+					$api_response = json_decode($file_content);
+					error_log("Using json cache file");
+				}
+				else {
+					// create a new api query and save the corresponding cache file
+					$file_content = file_get_contents($json_url,0,null,null);  
+					$api_response = json_decode($file_content);
+					$json = json_encode($api_response, JSON_PRETTY_PRINT);
+					//error_log($json);
+					file_put_contents($json_cache_file, $json);
+					error_log("new json cache file created for expertime weather.");
+				}
+
+				//$result = $json_output;
+				
+				$city_name =  $json_output['city_info']['name'];
+
+				// print_r($json_output);
+
 			}
 			
 		}
