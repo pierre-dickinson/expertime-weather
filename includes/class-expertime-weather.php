@@ -195,12 +195,15 @@ class Expertime_Weather {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		
 		// create the dedicated front page 
-		$this->loader->add_action( 'init', $plugin_public, 'create_expertime_weather_page' );
+		$this->loader->add_action( 'init', $plugin_public, 'etw_create_expertime_weather_page' );
+		
+		// be sure ‘Access-Control-Allow-Origin’ header is present on front page 
+		$this->loader->add_action( 'init', $plugin_public, 'etw_add_cors_http_header' );
 		
 		// Template loader instantiate here
-		$this->loader->add_filter( 'the_content', $plugin_public, 'get_expertime_weather_template');
+		$this->loader->add_filter( 'the_content', $plugin_public, 'etw_get_expertime_weather_template');
 	}
 
 	/**

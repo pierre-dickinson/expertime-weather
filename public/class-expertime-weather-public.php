@@ -40,6 +40,9 @@ class Expertime_Weather_Public {
 	 */
 	private $version;
 
+	private $google_api_key = 'AIzaSyA_rE4ZgX194X5WSocW1aFgMFwgkhvAwvE';
+
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -71,6 +74,13 @@ class Expertime_Weather_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		
+		 // ccheck if native wp-block-library css grid is loaded
+		 wp_enqueue_style( 'wp-block-library' );
+
+		if ( current_theme_supports( 'wp-block-styles' ) ) {
+			wp_enqueue_style( 'wp-block-library-theme' );
+		}
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/expertime-weather-public.css', array(), $this->version, 'all' );
 
@@ -96,8 +106,9 @@ class Expertime_Weather_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/expertime-weather-public.js', array( 'jquery' ), $this->version, false );
-		
+		wp_enqueue_script('googlemaps', 'https://maps.googleapis.com/maps/api/js?libraries=places&key='.$this->google_api_key, array(), '', false);
 	}
+
 
 
 	/**
@@ -105,7 +116,7 @@ class Expertime_Weather_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function create_expertime_weather_page() {
+	public function etw_create_expertime_weather_page() {
 
 		$page_slug = 'my-weather';
 
@@ -139,7 +150,7 @@ class Expertime_Weather_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function get_expertime_weather_template($content) {
+	public function etw_get_expertime_weather_template($content) {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -152,14 +163,65 @@ class Expertime_Weather_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		$plugin_template_loader = new Expertime_Weather_Template_Loader;
 
 		if ( is_page( 'my-weather' ) ) {
-        	$content .= $plugin_template_loader->get_template_part( 'my-weather' );
+			$plugin_template_loader = new Expertime_Weather_Template_Loader;
+			$plugin_template_loader->get_template_part( 'my-weather' );
 		}
+
 		return $content;
-		
+	}
+
+
+	/**
+	 * Be sure ‘Access-Control-Allow-Origin’ header is present on front end
+	 * for https://freegeoip.net/json/ api access
+	 *
+	 * @since    1.0.0
+	 */
+	
+	public function etw_add_cors_http_header(){
+		header("Access-Control-Allow-Origin: *");
 	}
 	
+	
+	/**
+	 * Render the right search query for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
 
+	
+	static $search = '';
+	
+	public static function etw_search_query($search) {
+
+		/**
+		 * This function returns the search adress query value in template
+		 * tpl: myweather.php
+		 */
+
+		if ( is_page( 'my-weather' ) ) {
+			// default placeholder
+			$search = esc_attr_x( 'Enter an adress...', 'expertime-weather' );
+		}
+
+		//return self::$search;
+		return $search;
+	}
+	
+}
+
+/**
+ * Use static class methods in plugins 
+ * to make method from plugin available in theme
+ * 
+ */
+
+if ( ! function_exists( 'get_expertime_weather_search_query' ) ) {
+
+    function get_expertime_weather_search_query($search = '') {
+       echo Expertime_Weather_Public::etw_search_query($search);
+	}
+	
 }

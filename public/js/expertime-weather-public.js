@@ -2,14 +2,9 @@
 	'use strict';
 
 	/**
-	 * All of the code for your public-facing JavaScript source
-	 * should reside in this file.
+	 * All of the code for your public-facing JavaScript source reside in this file.
 	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
+	 * define handlers, for when the DOM is ready:
 	 *
 	 * $(function() {
 	 *
@@ -21,12 +16,43 @@
 	 *
 	 * });
 	 *
-	 * ...and/or other possibilities.
 	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
 	 */
+	
+	 // actual google api key : AIzaSyCBwn0wn6xypgYc5oCGdpq6tSCRToRdIRY
+
+	$(function() {
+
+		function initializeAutocomplete(id) {
+			var element = document.getElementById(id);
+			if (element) {
+			  var autocomplete = new google.maps.places.Autocomplete(element, { types: ['geocode'] });
+			  google.maps.event.addListener(autocomplete, 'place_changed', onPlaceChanged);
+			}
+		  }
+		  
+		  function onPlaceChanged() {
+			var place = this.getPlace();
+		  
+			console.log(place);  // Uncomment this line to view the full object returned by Google API.
+		  
+			for (var i in place.address_components) {
+			  var component = place.address_components[i];
+			  for (var j in component.types) {  // Some types are ["country", "political"]
+				var type_element = document.getElementById(component.types[j]);
+				if (type_element) {
+				  type_element.value = component.long_name;
+				}
+			  }
+			}
+		  }
+		  
+		  google.maps.event.addDomListener(window, 'load', function() {
+			initializeAutocomplete('expertime-weather-search-adress');
+		  });
+
+	});
+
+	
 
 })( jQuery );

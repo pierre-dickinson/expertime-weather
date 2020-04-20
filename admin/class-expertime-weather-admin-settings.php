@@ -166,7 +166,7 @@ class Expertime_Weather_Admin_Settings {
         // display options values recorded in db
         //var_dump($options);
         
-		echo '<p>' . __( 'For instance: https://www.prevision-meteo.ch/services/json/lat=[latitude]lng=[longitude]', 'expertime-weather' ) . '</p>';
+		echo '<p>' . __( 'For instance: https://www.prevision-meteo.ch/services/json/lat=47.2173lng=-1.5534', 'expertime-weather' ) . '</p>';
 	} // end general_options_callback
 
 
@@ -322,7 +322,6 @@ class Expertime_Weather_Admin_Settings {
 		return apply_filters( 'validate_input_api_configuration_options', $output, $input );
 
 	} // end validate_input_api_configuration_options
-
 
 
 }

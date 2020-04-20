@@ -14,4 +14,59 @@
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
-<p> --- Hello World</p>
+<div class="expertime-weather-container">
+    
+    <div class="wp-block-columns alignwide has-2-columns">
+    
+    <div class="wp-block-column">
+        <figure class="wp-block-image">
+            <!--  some responsive image here -->
+        </figure>
+
+        <h3>Ma météo</h3>
+
+        <p>
+        <a class="btn button">Utiliser ma position actuelle</a>
+        </p>
+
+    </div>
+
+    <div class="wp-block-column">
+
+    <h3>Entrer une adresse</h3>
+
+    <form role="search-adress" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+        
+        <label for="search-adress-form">
+            <span class="screen-reader-text">Entrer une adresse&nbsp;:</span>
+            <input type="search" id="expertime-weather-search-adress" class="search-field" placeholder="<?php echo get_expertime_weather_search_query(); ?>" value="" name="s-adress">
+        </label>
+
+        <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'expertime-weather' ); ?>">
+
+        <div style="visibility:hidden;opacity:0;">
+            <label>
+            <span class="screen-reader-text">street_number&nbsp;:</span>
+            <input id="street_number" name="street_number" class="search-field" disabled>
+            </label>
+        
+            <label>
+            <span class="screen-reader-text">route&nbsp;:</span>
+            <input id="route" name="route" disabled>
+            </label>
+            
+            <label>
+            <span class="screen-reader-text">locality&nbsp;:</span>
+            <input id="locality" name="locality" disabled>
+            </label>
+            
+            <label>
+            <span class="screen-reader-text">country&nbsp;:</span>
+            <input id="country" name="country" disabled>
+            </label>
+        </div>
+    </form>
+
+    </div>
+    </div>
+</div>
