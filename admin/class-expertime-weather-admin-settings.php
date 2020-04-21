@@ -107,7 +107,6 @@ class Expertime_Weather_Admin_Settings {
 
 		$defaults = array(
 			'input_api_endpoint'		=>	''  // ex. https://www.prevision-meteo.ch/services/json
-			//'another_input'	=>	'',
 		);
 
 		return $defaults;
@@ -150,7 +149,7 @@ class Expertime_Weather_Admin_Settings {
 		$options = get_option('expertime_weather_configuration_options');
 		var_dump($options);
 		echo '<p>' . __( 'Edit your weather api configuration.', 'expertime-weather' ) . '</p>';
-	} // end general_options_callback
+	}
 
 	
 	/**

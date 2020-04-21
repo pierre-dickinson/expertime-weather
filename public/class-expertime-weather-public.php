@@ -66,18 +66,15 @@ class Expertime_Weather_Public {
 	public function enqueue_styles() {
 
 		/**
-		 * This function is provided for demonstration purposes only.
+		 * Manage styles 
 		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Expertime_Weather_Loader as all of the hooks are defined
-		 * in that particular class.
+		 * Gutemberg block support 
+		 * With a grid css fallback if needed
 		 *
-		 * The Expertime_Weather_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
 		 */
 		
 		 // check if native wp-block-library css grid is loaded
+		 // to be sure its loaded on our page
 		if ( current_theme_supports( 'wp-block-styles' ) ) {
 			wp_enqueue_style( 'wp-block-library' );
 			wp_enqueue_style( 'wp-block-library-theme' );
@@ -90,6 +87,7 @@ class Expertime_Weather_Public {
 			wp_enqueue_style( 'simple-grid', plugin_dir_url( __FILE__ ) . 'css/simple-grid.css', array(), $this->version, 'all' );
 		}
 
+		// extra styles
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/expertime-weather-public.css', array(), $this->version, 'all' );
 		
 	}
@@ -125,7 +123,7 @@ class Expertime_Weather_Public {
 		if( isset( $options['google_api_key'] ) ) {
 			$google_api_key = $options['google_api_key'];
 		}
-
+		
 		wp_enqueue_script('googlemaps', 'https://maps.googleapis.com/maps/api/js?libraries=places&key='.$google_api_key, array(), '', false);
 	}
 
@@ -254,8 +252,14 @@ class Expertime_Weather_Public {
 			$end_point_url = ''; 
 			if( isset( $options['input_api_endpoint'] ) ) {
 				$end_point_url = $options['input_api_endpoint'];
+
+				if(empty($end_point_url)) {
+					error_log('error: end point url set in plugin settings is empty.');
+					return $result;
+				}
 				// remove the slash if available at the end of url and add it again to avoid issue
 				$end_point_url = rtrim($end_point_url,"/").'/';
+
 			}
 			else {
 				error_log('error: no end point url set in plugin settings.');

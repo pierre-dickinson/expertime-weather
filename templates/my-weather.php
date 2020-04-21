@@ -21,6 +21,15 @@
 
 ?>
 
+<?php
+/**
+ * Check if a end point and/or a Google Maps API key are set in plugins settings
+ * we need to make sure the element is defined in the options. 
+ * If not, we'll not display the autocomplete search form
+ */
+$options = get_option( 'expertime_weather_options' );
+?>
+
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 <div class="expertime-weather-container container">
     
@@ -34,23 +43,23 @@
             <h3>Ma météo</h3>
 
             <p>
-            <a class="btn button" id="expertime-weather-geolocation-btn">Utiliser ma position actuelle</a>
+            <?php if( !isset( $options['input_api_endpoint'] ) OR empty($options['input_api_endpoint'])  ): ?>
+                <?php if( current_user_can('editor') || current_user_can('administrator') ): ?>
+                Veuillez renseigner votre url d'accès à l'api météo.
+                <br><a href="<?php echo get_admin_url() . 'admin.php?page=expertime-weather-settings-config'; ?>">Ajouter un endpoint (url)</a>
+                <?php else: ?>
+                Fonctionnalité indisponible pour le moment.
+                <?php endif; ?>
+                <?php else: ?>
+                <a class="btn button" id="expertime-weather-geolocation-btn">Utiliser ma position actuelle</a>
+            <?php endif; ?>
             </p>
 
         </div>
 
         <div class="wp-block-column col-12-sm col-6">
 
-        <?php
-        /**
-         * Check if a Google Maps API key is set in plugins settings
-         * we need to make sure the element is defined in the options. 
-         * If not, we'll not display the autocomplete search form
-         */
-        $options = get_option( 'expertime_weather_options' );
-        ?>
-
-		<?php if( !isset( $options['google_api_key'] ) ): ?>
+		<?php if( !isset( $options['google_api_key'] ) OR empty($options['google_api_key'])  ): ?>
             
             <?php if( current_user_can('editor') || current_user_can('administrator') ): ?>
             <p>
@@ -67,7 +76,7 @@
                 
                 <label for="search-adress-form">
                     <span class="screen-reader-text">Entrer une adresse&nbsp;:</span>
-                    <input type="search" id="expertime-weather-search-adress" class="search-field" placeholder="<?php echo get_expertime_weather_search_query(); ?>" value="" name="s-adress">
+                    <input type="search" id="expertime-weather-search-adress" class="search-field" placeholder="<?php echo get_expertime_weather_search_query(); ?>" value="" size="35" name="s-adress">
                 </label>
 
                 <!-- <input type="submit" class="search-submit" value="Rechercher"> -->
@@ -182,7 +191,7 @@
                                 <img class="weather-condition-pict" src="<?php echo $weather_data['fcst_day_'.$day_n]['icon_big']; ?>" alt="<?php echo $weather_data['fcst_day_'.$day_n]['condition_key']; ?>">
                                 <small>Min. <?php echo $weather_data['fcst_day_'.$day_n]['tmin']; ?> &deg;<br>Max.  <?php echo $weather_data['fcst_day_'.$day_n]['tmax']; ?> &deg;</small>
                             </li>
-                            <li><span class="font-heavy"><?php echo $weather_data['fcst_day_'.$day_n]['condition_key']; ?></span></li>
+                            <li><span class="font-heavy"><?php echo $weather_data['fcst_day_'.$day_n]['condition']; ?></span></li>
                         </ul>
                     </div>
                 <?php endfor; ?>
@@ -212,7 +221,10 @@
 // a way to avoid ajax during loading process
 $modal_class = 'modal';
 if ( isset($_GET['lat']) && isset($_GET['lng']) && empty($weather_data) ) {
-    $modal_class = 'modal show';
+   if( (isset( $options['input_api_endpoint'] ) && !empty($options['input_api_endpoint'])) ) {
+        // pas de data, pas de chocolat ;-)
+        $modal_class = 'modal show';
+   }
 }
 ?>
 <div class="<?php echo $modal_class; ?>" id="loading-modal">

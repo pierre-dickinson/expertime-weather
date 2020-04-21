@@ -64,11 +64,12 @@
 
 			//console.log(latitude);
 			//console.log(longitude);
-			
+
 			loadingModal.addClass( "show" );
 
 			// refresh results section
 			$( "#expertime-weather-results" ).empty();
+			$( "html, body" ).animate({ scrollTop: $( "#expertime-weather-results" ).scrollTop() }, 1000);
 			
 			// remove get parameters from url
 			var uri = window.location.toString();
@@ -121,6 +122,7 @@
 
 					// refresh results section
 					$( "#expertime-weather-results" ).empty();
+					$( "html, body" ).animate({ scrollTop: $( "#expertime-weather-results" ).scrollTop() }, 1000);
 
 					// remove get parameters from url
 					var uri = window.location.toString();
@@ -154,7 +156,6 @@
 		});
 
 	});
-
 	
 
 })( jQuery );
