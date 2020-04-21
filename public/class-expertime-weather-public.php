@@ -41,8 +41,8 @@ class Expertime_Weather_Public {
 	private $version;
 
 
-	// following string can be removed in production
-	private $google_api_key = 'AIzaSyA_rE4ZgX194X5WSocW1aFgMFwgkhvAwvE'; // during tests
+	// following string must be provided in the plugin option panel
+	private $google_api_key = '';
 
 
 	/**
@@ -77,15 +77,21 @@ class Expertime_Weather_Public {
 		 * class.
 		 */
 		
-		 // ccheck if native wp-block-library css grid is loaded
-		 wp_enqueue_style( 'wp-block-library' );
-
+		 // check if native wp-block-library css grid is loaded
 		if ( current_theme_supports( 'wp-block-styles' ) ) {
+			wp_enqueue_style( 'wp-block-library' );
 			wp_enqueue_style( 'wp-block-library-theme' );
+		}
+		else {
+			/**
+			 * we use a lightweight css grid (2Ko)
+			 * @link https://simplegrid.io
+			 */
+			wp_enqueue_style( 'simple-grid', plugin_dir_url( __FILE__ ) . 'css/simple-grid.css', array(), $this->version, 'all' );
 		}
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/expertime-weather-public.css', array(), $this->version, 'all' );
-
+		
 	}
 
 	/**
@@ -113,7 +119,9 @@ class Expertime_Weather_Public {
 		$options = get_option( 'expertime_weather_options' );
 
 		// Next, we need to make sure the element is defined in the options. If not, we'll set an empty string.
+		
 		$google_api_key = $this->google_api_key; // default one
+
 		if( isset( $options['google_api_key'] ) ) {
 			$google_api_key = $options['google_api_key'];
 		} // end if
@@ -187,7 +195,7 @@ class Expertime_Weather_Public {
 
 	/**
 	 * Be sure ‘Access-Control-Allow-Origin’ header is present on front end
-	 * for https://freegeoip.net/json/ api access
+	 * for https:// protocol json api access
 	 *
 	 * @since    1.0.0
 	 */
@@ -232,7 +240,7 @@ class Expertime_Weather_Public {
 	
 	static $result = '';
 	
-	public static function etw_search_results($result) {
+	public static function etw_search_results($result = array()) {
 
 		/**
 		 * This function returns the search adress query value in template
@@ -256,16 +264,15 @@ class Expertime_Weather_Public {
 			}
 			
 			if ( isset($_GET['lat']) && isset($_GET['lng']) ) {
+				
 				if ( empty($_GET['lat']) OR empty($_GET['lng']) ) {
 					error_log('error: lat or long values are empty in url GET parameters.');
 					return;
 				}
 			
-
 				// eg. https://www.prevision-meteo.ch/services/json/lat=48.7405305lng=7.3648099
 	
 				$json_url = $end_point_url . 'lat=' . $_GET["lat"] . 'lng=' . $_GET["lng"]; 
-
 
 				// first let's check if the json file is not allready in the cache
 
@@ -274,29 +281,40 @@ class Expertime_Weather_Public {
 				$json_filename = str_replace(".", "", $json_filename);
 				$json_filename = str_replace("-", "", $json_filename);
 
+				/**
+				 * For better performance with the API (and testing purpose)
+				 * We want to use the same weather json data during one hour 
+				 * add today's date to keep a daily record for a given lat+lng position
+				 * example: 2020041920 for 2020/04/19 at 20h (8pm)
+				 *  
+				 */ 
+				$current_date = get_the_date( 'YmdH' );
+				if (!empty($current_date)) {
+					$json_filename = $current_date . '-' . $json_filename;
+				}
+
 				$json_cache_dir = plugin_dir_path( dirname( __FILE__ ) ) . 'public/cache/';
 				$json_cache_file = $json_cache_dir . "/" . $json_filename . ".json";
 				if (file_exists($json_cache_file)) {
 					$file_content = file_get_contents($json_cache_file);
-					$api_response = json_decode($file_content);
+					$api_response = json_decode($file_content, true);
 					error_log("Using json cache file");
 				}
 				else {
 					// create a new api query and save the corresponding cache file
 					$file_content = file_get_contents($json_url,0,null,null);  
-					$api_response = json_decode($file_content);
+					$api_response = json_decode($file_content, true);
 					$json = json_encode($api_response, JSON_PRETTY_PRINT);
 					//error_log($json);
 					file_put_contents($json_cache_file, $json);
 					error_log("new json cache file created for expertime weather.");
 				}
 
-				//$result = $json_output;
-				
-				$city_name =  $json_output['city_info']['name'];
+				// return results as an array
 
-				// print_r($json_output);
-
+				$result = $api_response;
+				//print_r($result);
+				//$city_name =  $result['city_info']['name'];
 			}
 			
 		}
@@ -316,15 +334,15 @@ class Expertime_Weather_Public {
 if ( ! function_exists( 'get_expertime_weather_search_query' ) ) {
 
     function get_expertime_weather_search_query($search = '') {
-       echo Expertime_Weather_Public::etw_search_query($search);
+       return Expertime_Weather_Public::etw_search_query($search);
 	}
 	
 }
 
 if ( ! function_exists( 'get_expertime_weather_search_results' ) ) {
 
-    function get_expertime_weather_search_results($result = '') {
-       echo Expertime_Weather_Public::etw_search_results($result);
+    function get_expertime_weather_search_results($result = array()) {
+       return Expertime_Weather_Public::etw_search_results($result);
 	}
 	
 }

@@ -11,14 +11,22 @@
  * @package    Expertime_Weather
  * @subpackage Expertime_Weather/public/partials
  */
+
+ /**
+  * Layout Grid system is Gutemberg compatible
+ *  if not in use in the active theme, we use a lightweight css grid (2Ko)
+ *  You can edit the grid in css/simple-grid.css
+ *  @link https://simplegrid.io
+ */
+
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
-<div class="expertime-weather-container">
+<div class="expertime-weather-container container">
     
-    <div class="wp-block-columns alignwide has-2-columns">
+    <div class="wp-block-columns alignwide has-2-columns row">
     
-        <div class="wp-block-column">
+        <div class="wp-block-column col-12-sm col-6">
             <figure class="wp-block-image">
                 <!--  some responsive image here -->
             </figure>
@@ -31,7 +39,27 @@
 
         </div>
 
-        <div class="wp-block-column">
+        <div class="wp-block-column col-12-sm col-6">
+
+        <?php
+        /**
+         * Check if a Google Maps API key is set in plugins settings
+         * we need to make sure the element is defined in the options. 
+         * If not, we'll not display the autocomplete search form
+         */
+        $options = get_option( 'expertime_weather_options' );
+        ?>
+
+		<?php if( !isset( $options['google_api_key'] ) ): ?>
+            
+            <?php if( current_user_can('editor') || current_user_can('administrator') ): ?>
+            <p>
+                Veuillez renseigner votre clé d'api Google Maps pour activer la recherche d'adresse par saisie.
+                <br><a href="<?php echo get_admin_url() . 'admin.php?page=expertime-weather-settings-config'; ?>">Ajouter ma clé d'api Google Maps</a>
+            </p>
+            <?php endif; ?>
+        
+        <?php else: ?>
 
             <h3>Entrer une adresse</h3>
 
@@ -76,20 +104,63 @@
                     </label>
                 </div>
             </form>
-        </div>
 
+        <?php endif; ?>
+
+        </div>
     </div>
 
-    <div class="wp-block-columns alignwide has-1-columns">
+    <div class="wp-block-columns alignwide has-1-columns row">
     
-        <div class="wp-block-column">
-            <div id="expertime-weather-results" style="padding:30px 0;">
+        <div class="wp-block-column col-12">
+            
             
             <?php 
-            echo get_expertime_weather_search_results();
+            $weather_data = get_expertime_weather_search_results();
+            //echo '<pre>';
+            // print_r($weather_data);
+            //echo '</pre>';
             ?>
-            
+           
+            <div id="expertime-weather-results">
+
+            <?php if (!empty($weather_data)): ?>
+            <!-- start current condition section -->
+               
+                <div class="wp-block-columns alignwide has-1-columns row">
+                    
+                    <div class="wp-block-column col-12">
+                        <h4>Actuellement</h4>
+                        <p>
+                          Lever du soleil : <?php echo $weather_data['city_info']['sunrise']; ?>
+                          - Coucher du soleil : <?php echo $weather_data['city_info']['sunset']; ?>
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="wp-block-columns alignwide has-1-columns row">
+                    <div class="wp-block-column col-3 col-12-sm">
+                        <h5>Mardi</h5>
+                    </div>
+                    <div class="wp-block-column col-3 col-12-sm">
+                        <h5>Mercerdi</h5>
+                    </div>
+                    <div class="wp-block-column col-3 col-12-sm">
+                        <h5>jeu</h5>
+                    </div>
+                    <div class="wp-block-column col-3 col-12-sm">
+                        <h5>ven</h5>
+                    </div>
+                </div>
+
+                </div>
+
+            <!-- end section current condition -->
+
+            <?php endif; ?>
             </div>
+            
         </div>
 
     </div>
