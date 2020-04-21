@@ -56,7 +56,7 @@ class Expertime_Weather_Admin_Settings {
 	public function setup_plugin_options_menu() {
 
         //Add the menu to the main admin nav menu set of menu items
-        
+		
 		add_menu_page(
 			__( 'Weather', 'expertime-weather' ), 					// The title to be displayed in the browser window for this page.
 			__( 'Weather', 'expertime-weather' ),					// The text to be displayed for this menu item
@@ -147,7 +147,7 @@ class Expertime_Weather_Admin_Settings {
 	 */
 	public function general_options_callback() {
 		$options = get_option('expertime_weather_configuration_options');
-		var_dump($options);
+		//var_dump($options);
 		echo '<p>' . __( 'Edit your weather api configuration.', 'expertime-weather' ) . '</p>';
 	}
 
