@@ -70,7 +70,7 @@
                     <input type="search" id="expertime-weather-search-adress" class="search-field" placeholder="<?php echo get_expertime_weather_search_query(); ?>" value="" name="s-adress">
                 </label>
 
-                <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'expertime-weather' ); ?>">
+                <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Rechercher', 'expertime-weather' ); ?>">
 
                 <div>
                     <label>
@@ -114,12 +114,9 @@
     
         <div class="wp-block-column col-12">
             
-            
             <?php 
+            // get json data as an array
             $weather_data = get_expertime_weather_search_results();
-            //echo '<pre>';
-            // print_r($weather_data);
-            //echo '</pre>';
             ?>
            
             <div id="expertime-weather-results">
@@ -127,21 +124,49 @@
             <?php if (!empty($weather_data)): ?>
             <!-- start current condition section -->
                
-                <div class="wp-block-columns alignwide has-1-columns row">
+                <div class="wp-block-columns alignwide has-1-columns row" id="current-condition">
                     
-                    <div class="wp-block-column col-12">
-                        <h4>Actuellement</h4>
+                    <div class="wp-block-column col-12 col-6-sm">
+                        <h4> <?php _e( "Aujourd'hui", 'expertime-weather' ); ?>, <?php echo $weather_data['current_condition']['date']; ?></h4>
                         <p>
                           Lever du soleil : <?php echo $weather_data['city_info']['sunrise']; ?>
                           - Coucher du soleil : <?php echo $weather_data['city_info']['sunset']; ?>
                         </p>
                     </div>
 
+                    <div class="wp-block-column col-12 col-6-sm">
+                        <h5><?php _e( "Conditions à ", 'expertime-weather' ); ?> <?php echo $weather_data['current_condition']['hour']; ?></h5>
+                        <p class="weather-current-condition">
+                            <img class="weather-condition-pict" src="<?php echo $weather_data['current_condition']['icon_big']; ?>" alt="<?php echo $weather_data['current_condition']['condition_key']; ?>">
+                            <strong><?php echo $weather_data['current_condition']['condition']; ?></strong>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="wp-block-columns alignwide has-1-columns row" id="current-condition">
+
+                    <div class="wp-block-column col-12 col-12-sm">
+                        <ul>
+                            <li><?php _e( "Température actuelle", 'expertime-weather' ); ?> : <?php echo $weather_data['current_condition']['tmp']; ?></li>
+                            <li><?php _e( "Vitesse du vent", 'expertime-weather' ); ?> : <?php echo $weather_data['current_condition']['wnd_spd']; ?> k/h</li>
+                            <li><?php _e( "Direction du vent", 'expertime-weather' ); ?> : <?php echo $weather_data['current_condition']['wnd_dir']; ?></li>
+                            <li><?php _e( "Pression atmosphérique", 'expertime-weather' ); ?> : <?php echo $weather_data['current_condition']['pressure']; ?> k/h</li>
+                            <li><?php _e( "Humidité", 'expertime-weather' ); ?> : <?php echo $weather_data['current_condition']['humidity']; ?> &#37;</li>
+                        </ul>
+                    </div>
+
                 </div>
 
-                <div class="wp-block-columns alignwide has-1-columns row">
+                <div class="wp-block-columns alignwide has-1-columns row" style="padding-top:30px;">
                     <div class="wp-block-column col-3 col-12-sm">
-                        <h5>Mardi</h5>
+                        <h5><?php echo $weather_data['fcst_day_0']['day_long']; ?></h5> 
+                        <ul class="weather-day-bloc">
+                            <li>
+                                <img class="weather-condition-pict" src="<?php echo $weather_data['fcst_day_0']['icon_big']; ?>" alt="<?php echo $weather_data['current_condition']['condition_key']; ?>">
+                                <small>Min. <?php echo $weather_data['fcst_day_0']['tmin']; ?> &deg;<br>Max.  <?php echo $weather_data['fcst_day_0']['tmax']; ?> &deg;</small>
+                            </li>
+                            <li><span class="font-heavy"><?php echo $weather_data['fcst_day_0']['condition_key']; ?></span></li>
+                        </ul>
                     </div>
                     <div class="wp-block-column col-3 col-12-sm">
                         <h5>Mercerdi</h5>
@@ -157,7 +182,12 @@
                 </div>
 
             <!-- end section current condition -->
-
+            <?php else: ?>
+                <div class="wp-block-columns alignwide has-1-columns row" id="no-weather-data">
+                    <div class="wp-block-column col-12">
+                    <p><?php _e( "Veuillez indiquer une localité pour afficher la météo correspondante.", 'expertime-weather' ); ?></p>
+                    </div>
+                </div>
             <?php endif; ?>
             </div>
             

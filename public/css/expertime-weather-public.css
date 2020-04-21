@@ -4,20 +4,50 @@
  */
 
  /**
- * The above css use the native wordpress 5.0 gutemberg css grid  library
+ * The above css use the native wordpress 5.0 gutemberg css grid library
  * @link https://github.com/WordPress/gutenberg/tree/master/packages/block-library
+ * we use simple-grid.css as an agnostic fallback css grid system 
+ * @link https://simplegrid.io
 */
 
-/** Some basic styles to make things look nice.**/
+/** Some basic styles to make things look nice. **/
 
 img {
     max-width: 100%;
 }
 
+.expertime-weather-container img.weather-condition-pict {
+    width:auto;
+    height:70px;
+    float: left;
+    margin-right:20px;
+}
+
+.expertime-weather-container p.weather-current-condition {
+    line-height: 70px;
+    vertical-align: middle;
+}
+
 .expertime-weather-container {
     width: 100%;
-    max-width: 100% !important;
+    max-width: 100% !important; /* for better themes grid compatibility */
 }
+
+.expertime-weather-container ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+ul.weather-day-bloc li {
+    width:100%;
+    padding:8px;
+    margin:10px 0;
+}
+
+.font-heavy {
+    font-weight: 700;
+}
+  
 
 /***************/
 
