@@ -118,17 +118,16 @@ class Expertime_Weather_Public {
 
 		$options = get_option( 'expertime_weather_options' );
 
-		// Next, we need to make sure the element is defined in the options. If not, we'll set an empty string.
-		
+		// Next, we need to make sure the element is defined in the options. 
+		// If not, we'll set an empty string.
 		$google_api_key = $this->google_api_key; // default one
 
 		if( isset( $options['google_api_key'] ) ) {
 			$google_api_key = $options['google_api_key'];
-		} // end if
+		}
 
 		wp_enqueue_script('googlemaps', 'https://maps.googleapis.com/maps/api/js?libraries=places&key='.$google_api_key, array(), '', false);
 	}
-
 
 
 	/**
@@ -305,23 +304,29 @@ class Expertime_Weather_Public {
 				if (file_exists($json_cache_file)) {
 					$file_content = file_get_contents($json_cache_file);
 					$api_response = json_decode($file_content, true);
-					error_log("Using json cache file");
+					//error_log("Using json cache file for Weather data.");
 				}
 				else {
 					// create a new api query and save the corresponding cache file
-					$file_content = file_get_contents($json_url,0,null,null);  
-					$api_response = json_decode($file_content, true);
-					$json = json_encode($api_response, JSON_PRETTY_PRINT);
-					//error_log($json);
-					file_put_contents($json_cache_file, $json);
-					error_log("new json cache file created for expertime weather.");
+					$file_content = file_get_contents($json_url,0,null,null); 
+					if($file_content === FALSE) { 
+						// handle error here... 
+						error_log("error while getting data from weather api:");
+						error_log("file_get_contents() error for this url : " . $json_url);
+						$api_response = '';
+					}
+					else {
+						$api_response = json_decode($file_content, true);
+						$json = json_encode($api_response, JSON_PRETTY_PRINT);
+						//error_log($json);
+						file_put_contents($json_cache_file, $json);
+						error_log("new json cache file created for expertime weather.");
+					}
 				}
 
 				// return results as an array
-
 				$result = $api_response;
 				//print_r($result);
-				//$city_name =  $result['city_info']['name'];
 			}
 			
 		}

@@ -97,6 +97,8 @@ ul.weather-day-bloc li {
     text-align: center;
     background: rgba(0,0,0, .9);
     transition: opacity .25s ease;
+    width:100% !important;
+    max-width: 100% !important;
   }
   
   .modal__bg {
@@ -106,6 +108,7 @@ ul.weather-day-bloc li {
     bottom: 0;
     left: 0;
     cursor: pointer;
+    width:100% !important;
   }
   
   .modal.show {

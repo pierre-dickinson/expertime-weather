@@ -124,13 +124,28 @@
             <?php if (!empty($weather_data)): ?>
             <!-- start current condition section -->
                
+                <?php if (!empty($weather_data['errors'])): ?>
+
+                <div class="wp-block-columns alignwide has-1-columns row" id="api-error">
+                    <div class="wp-block-column col-12">
+                        <h6><?php _e( "Une erreur est survenue", 'expertime-weather' ); ?>: </h6>
+                        <ul>
+                        <li>Code: <?php echo $weather_data['errors'][0]['code']; ?></li>
+                        <li>Text: <?php echo $weather_data['errors'][0]['text']; ?></li>
+                        <li>Description: <?php echo $weather_data['errors'][0]['description']; ?></li> 
+                        </ul>
+                    </div>
+                </div>
+
+                <?php else: ?>
+
                 <div class="wp-block-columns alignwide has-1-columns row" id="current-condition">
                     
                     <div class="wp-block-column col-12 col-6-sm">
                         <h4> <?php _e( "Aujourd'hui", 'expertime-weather' ); ?>, <?php echo $weather_data['fcst_day_0']['day_long']; ?> <?php echo $weather_data['current_condition']['date']; ?></h4>
                         <p>
-                          Lever du soleil : <?php echo $weather_data['city_info']['sunrise']; ?>
-                          - Coucher du soleil : <?php echo $weather_data['city_info']['sunset']; ?>
+                        <?php _e( "Lever du soleil", 'expertime-weather' ); ?>: <?php echo $weather_data['city_info']['sunrise']; ?>
+                          - <?php _e( "Coucher du soleil", 'expertime-weather' ); ?>: <?php echo $weather_data['city_info']['sunset']; ?>
                         </p>
                     </div>
 
@@ -176,6 +191,8 @@
 
             </div>
 
+                <?php endif; ?>
+
             <!-- end section current condition -->
             <?php else: ?>
                 <div class="wp-block-columns alignwide has-1-columns row" id="no-weather-data">
@@ -192,7 +209,7 @@
 
 </div>
 <?php
-// a way to avoid ajax 
+// a way to avoid ajax during loading process
 $modal_class = 'modal';
 if ( isset($_GET['lat']) && isset($_GET['lng']) && empty($weather_data) ) {
     $modal_class = 'modal show';
