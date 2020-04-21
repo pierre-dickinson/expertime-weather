@@ -219,11 +219,11 @@ $options = get_option( 'expertime_weather_options' );
 </div>
 <?php
 // a way to avoid ajax during loading process
-$modal_class = 'modal';
+$modal_class = 'loading-modal';
 if ( isset($_GET['lat']) && isset($_GET['lng']) && empty($weather_data) ) {
    if( (isset( $options['input_api_endpoint'] ) && !empty($options['input_api_endpoint'])) ) {
         // pas de data, pas de chocolat ;-)
-        $modal_class = 'modal show';
+        $modal_class = 'loading-modal show';
    }
 }
 ?>

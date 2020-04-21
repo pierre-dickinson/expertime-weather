@@ -85,7 +85,7 @@ ul.weather-day-bloc li {
 
 /* Modal (data loading state)
  * =============================== */
- .modal {
+ .loading-modal {
     opacity: 0;
     z-index:99;
     visibility: hidden;
@@ -111,12 +111,12 @@ ul.weather-day-bloc li {
     width:100% !important;
   }
   
-  .modal.show {
+  .loading-modal.show {
     opacity: 1;
     visibility: visible;
   }
   
-  .modal.show .modal__inner {
+  .loading-modal.show .modal__inner {
     top: 0;
   }
   
