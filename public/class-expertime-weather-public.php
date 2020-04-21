@@ -317,7 +317,15 @@ class Expertime_Weather_Public {
 				}
 				else {
 					// create a new api query and save the corresponding cache file
-					$file_content = file_get_contents($json_url,0,null,null); 
+					//$file_content = file_get_contents($json_url,0,null,null); 
+
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $json_url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					$file_content = curl_exec($ch);
+					error_log("Closing Curl connection."); 
+					curl_close($ch);
+
 					if($file_content === FALSE) { 
 						// handle error here... 
 						error_log("error while getting data from weather api:");
