@@ -305,6 +305,11 @@ class Expertime_Weather_Public {
 				$json_cache_dir = plugin_dir_path( dirname( __FILE__ ) ) . 'public/cache';
 				$json_cache_file = $json_cache_dir . "/" . $json_filename . ".json";
 				
+				if ( !is_dir( $json_cache_dir ) ) {
+					mkdir( $json_cache_dir, 0777 );
+					error_log("expertime weather json cache directory created.");      
+				}
+
 				if (file_exists($json_cache_file)) {
 					$file_content = file_get_contents($json_cache_file);
 					$api_response = json_decode($file_content, true);
@@ -323,7 +328,9 @@ class Expertime_Weather_Public {
 						$api_response = json_decode($file_content, true);
 						$json = json_encode($api_response, JSON_PRETTY_PRINT);
 						//error_log($json);
-						file_put_contents($json_cache_file, $json);
+						if ( is_dir( $json_cache_dir ) ) {
+							file_put_contents($json_cache_file, $json);
+						}
 						error_log("new json cache file created for expertime weather.");
 					}
 				}
