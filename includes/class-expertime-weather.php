@@ -176,7 +176,6 @@ class Expertime_Weather {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		
-		//$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_expertime_weather_menu_page' );
 		$this->loader->add_action( 'admin_menu', $plugin_settings, 'setup_plugin_options_menu' );
 		$this->loader->add_action( 'admin_init', $plugin_settings, 'initialize_display_options' );
 		$this->loader->add_action( 'admin_init', $plugin_settings, 'initialize_input_api_configuration_options' );

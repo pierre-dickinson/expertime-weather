@@ -101,23 +101,4 @@ class Expertime_Weather_Admin {
 
 	}
 
-	public function register_expertime_weather_menu_page() {
-
-		$expertime_weather_template_loader = new Expertime_Weather_Template_Loader;
-		//$expertime_weather_template_loader->get_template_part( 'my-weather' );
-
-		// add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
-		add_menu_page( 
-			__( 'Weather', 'expertime-weather' ),
-			__( 'Weather', 'expertime-weather' ),
-			'manage_options', 
-			'expertime-weather', 
-			get_template_part( 'my-weather' ),
-			'dashicons-cloud',
-			50
-		);
-
-		add_submenu_page( 'expertime-weather', 'Configuration', 'Configuration', 'manage_options', 'expertime-weather');
-	}
-
 }
