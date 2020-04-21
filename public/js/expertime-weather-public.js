@@ -28,6 +28,7 @@
 		/**
 		 * Google Maps API call for autocomplete adress search form
 		 * actual google api key is set in admin setting panel
+		 * 
 		 * Input text adress with autocomplete
 		*/
 		function initializeAutocomplete(id) {
