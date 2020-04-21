@@ -351,7 +351,8 @@ class Expertime_Weather_Admin_Settings {
 		// Return the array processing any additional functions filtered by this action
 		return apply_filters( 'validate_input_api_configuration_options', $output, $input );
 
-	} // end validate_input_api_configuration_options
+	} 
+	// end validate_input_api_configuration_options
 
 
 }
