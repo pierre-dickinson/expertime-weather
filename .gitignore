@@ -5,6 +5,6 @@
 .editorconfig
 .gitattributes
 node_modules
-public/cache/*
+public/cache/
 npm-debug.log
 yarn-error.log
