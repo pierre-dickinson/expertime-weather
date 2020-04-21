@@ -70,7 +70,7 @@
                     <input type="search" id="expertime-weather-search-adress" class="search-field" placeholder="<?php echo get_expertime_weather_search_query(); ?>" value="" name="s-adress">
                 </label>
 
-                <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Rechercher', 'expertime-weather' ); ?>">
+                <!-- <input type="submit" class="search-submit" value="Rechercher"> -->
 
                 <div>
                     <label>
@@ -127,7 +127,7 @@
                 <div class="wp-block-columns alignwide has-1-columns row" id="current-condition">
                     
                     <div class="wp-block-column col-12 col-6-sm">
-                        <h4> <?php _e( "Aujourd'hui", 'expertime-weather' ); ?>, <?php echo $weather_data['current_condition']['date']; ?></h4>
+                        <h4> <?php _e( "Aujourd'hui", 'expertime-weather' ); ?>, <?php echo $weather_data['fcst_day_0']['day_long']; ?> <?php echo $weather_data['current_condition']['date']; ?></h4>
                         <p>
                           Lever du soleil : <?php echo $weather_data['city_info']['sunrise']; ?>
                           - Coucher du soleil : <?php echo $weather_data['city_info']['sunset']; ?>
@@ -158,34 +158,29 @@
                 </div>
 
                 <div class="wp-block-columns alignwide has-1-columns row" style="padding-top:30px;">
+                    
+                <?php for($day_n = 1; $day_n <= 4; $day_n++) : ?>
                     <div class="wp-block-column col-3 col-12-sm">
-                        <h5><?php echo $weather_data['fcst_day_0']['day_long']; ?></h5> 
+                        <h5><?php echo $weather_data['fcst_day_'.$day_n]['day_long']; ?></h5> 
                         <ul class="weather-day-bloc">
                             <li>
-                                <img class="weather-condition-pict" src="<?php echo $weather_data['fcst_day_0']['icon_big']; ?>" alt="<?php echo $weather_data['current_condition']['condition_key']; ?>">
-                                <small>Min. <?php echo $weather_data['fcst_day_0']['tmin']; ?> &deg;<br>Max.  <?php echo $weather_data['fcst_day_0']['tmax']; ?> &deg;</small>
+                                <img class="weather-condition-pict" src="<?php echo $weather_data['fcst_day_'.$day_n]['icon_big']; ?>" alt="<?php echo $weather_data['fcst_day_'.$day_n]['condition_key']; ?>">
+                                <small>Min. <?php echo $weather_data['fcst_day_'.$day_n]['tmin']; ?> &deg;<br>Max.  <?php echo $weather_data['fcst_day_'.$day_n]['tmax']; ?> &deg;</small>
                             </li>
-                            <li><span class="font-heavy"><?php echo $weather_data['fcst_day_0']['condition_key']; ?></span></li>
+                            <li><span class="font-heavy"><?php echo $weather_data['fcst_day_'.$day_n]['condition_key']; ?></span></li>
                         </ul>
                     </div>
-                    <div class="wp-block-column col-3 col-12-sm">
-                        <h5>Mercerdi</h5>
-                    </div>
-                    <div class="wp-block-column col-3 col-12-sm">
-                        <h5>jeu</h5>
-                    </div>
-                    <div class="wp-block-column col-3 col-12-sm">
-                        <h5>ven</h5>
-                    </div>
-                </div>
+                <?php endfor; ?>
 
                 </div>
+
+            </div>
 
             <!-- end section current condition -->
             <?php else: ?>
                 <div class="wp-block-columns alignwide has-1-columns row" id="no-weather-data">
                     <div class="wp-block-column col-12">
-                    <p><?php _e( "Veuillez indiquer une localité pour afficher la météo correspondante.", 'expertime-weather' ); ?></p>
+                    <p><?php _e( "Veuillez indiquer une localité pour afficher la météo correspondante.", "expertime-weather" ); ?></p>
                     </div>
                 </div>
             <?php endif; ?>
@@ -195,4 +190,19 @@
 
     </div>
 
+</div>
+<?php
+// a way to avoid ajax 
+$modal_class = 'modal';
+if ( isset($_GET['lat']) && isset($_GET['lng']) && empty($weather_data) ) {
+    $modal_class = 'modal show';
+}
+?>
+<div class="<?php echo $modal_class; ?>" id="loading-modal">
+  <label class="modal__bg" for="modal-1"></label>
+  <div class="modal__inner">
+    <!-- <label class="modal__close" for="modal-1"></label> -->
+    <h6><?php _e( "Chargement des données météo ...", "expertime-weather" ); ?></h6>
+    <p><img src="<?php echo plugin_dir_url( __FILE__ ) . 'images/loading.gif'; ?>" class="loading" alt="loading..." /></p>
+  </div>
 </div>

@@ -54,6 +54,8 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
      *
      * @var string
      */
+
+
     protected $plugin_directory = EXPERTIME_WEATHER_PLUGIN_DIR;
   
     /**

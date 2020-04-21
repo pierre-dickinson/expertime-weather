@@ -288,13 +288,20 @@ class Expertime_Weather_Public {
 				 * example: 2020041920 for 2020/04/19 at 20h (8pm)
 				 *  
 				 */ 
-				$current_date = get_the_date( 'YmdH' );
+
+				// use WP timestamp date to be sure we don't get the local server time
+				//$current_date = get_the_date( 'YmdH' );
+				$current_date = date_i18n('YmdH', current_time('timestamp'));
+				//error_log($date);
+
 				if (!empty($current_date)) {
+					// filename based on current day and hour time combined for caching purpose
 					$json_filename = $current_date . '-' . $json_filename;
 				}
 
-				$json_cache_dir = plugin_dir_path( dirname( __FILE__ ) ) . 'public/cache/';
+				$json_cache_dir = plugin_dir_path( dirname( __FILE__ ) ) . 'public/cache';
 				$json_cache_file = $json_cache_dir . "/" . $json_filename . ".json";
+				
 				if (file_exists($json_cache_file)) {
 					$file_content = file_get_contents($json_cache_file);
 					$api_response = json_decode($file_content, true);

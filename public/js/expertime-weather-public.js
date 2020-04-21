@@ -21,6 +21,10 @@
 	
 	$(function() {
 
+		var loadingModal = $("#loading-modal");
+		var modal_bg = $("#loading-modal .modal__bg");
+		var modal_close = $("#loading-modal .modal__close");
+		
 		/**
 		 * Google Maps API call for autocomplete adress search form
 		 * actual google api key is set in admin setting panel
@@ -37,7 +41,7 @@
 		  function onPlaceChanged() {
 			var place = this.getPlace();
 		  
-			console.log(place);  // Uncomment this line to view the full object returned by Google API.
+			// console.log(place);  // Uncomment this line to view the full object returned by Google API.
 		  
 			for (var i in place.address_components) {
 			  var component = place.address_components[i];
@@ -60,9 +64,12 @@
 
 			//console.log(latitude);
 			//console.log(longitude);
+			
+			loadingModal.addClass( "show" );
 
 			// refresh results section
 			$( "#expertime-weather-results" ).empty();
+			
 			// remove get parameters from url
 			var uri = window.location.toString();
 			if (uri.indexOf("?") > 0) {
@@ -90,8 +97,6 @@
 		// user geolocation
 		btn_geolocate.click(function() {
 
-			console.log('click');
-
 			// first check for Geolocation support
 			if (!navigator.geolocation) {
 				console.log('Geolocation is not supported for this Browser/OS.');
@@ -101,6 +106,8 @@
 				var startPos;
 				var latitude;
 				var longitude;
+
+				loadingModal.addClass( "show" );
 
 				var geoSuccess = function(position) {
 					
@@ -132,6 +139,18 @@
 				
 			}
 			
+		});
+
+
+		/**
+		  *  Loading Modal
+		  */
+
+		modal_bg.click(function() {
+			loadingModal.removeClass( "show" );
+		});
+		modal_close.click(function() {
+			loadingModal.removeClass( "show" );
 		});
 
 	});
